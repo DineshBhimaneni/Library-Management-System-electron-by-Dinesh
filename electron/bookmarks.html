@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Library Portal | Bookmarks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="facultys.css">
+    <style>
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-cover {
+            height: 200px;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 3rem;
+        }
+
+        .book-details {
+            padding: 1.5rem;
+        }
+
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-author {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+
+        .book-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .book-actions button {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .borrow-btn {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .borrow-btn:hover {
+            background: var(--primary);
+        }
+
+        .remove-btn {
+            background: var(--accent);
+            color: white;
+        }
+
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+
+        .floating-elements {
+            /* ... */
+        }
+
+        .floating-book {
+            /* ... */
+        }
+
+        @keyframes pulse {
+            /* ... */
+        }
+
+        @keyframes float {
+            /* ... */
+        }
+
+        @keyframes ripple {
+            /* ... */
+        }
+
+        @media (max-width: 992px) {
+            /* ... */
+        }
+
+        @media (max-width: 768px) {
+            /* ... */
+        }
+
+        @media (max-width: 576px) {
+            /* ... */
+        }
+    </style>
+</head>
+
+<body class="light-mode">
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="top-header-container">
+            <div class="university-info">
+                <i class="fas fa-university"></i>
+                <span>University of Knowledge</span>
+            </div>
+            <div class="top-header-links">
+                <a href="mailto:faculty@university.edu"><i class="fas fa-envelope"></i> Faculty Mail</a>
+                <a href="https://outlook.office365.com/owa/calendar/c5368a2f38a14425b7bfe0806e6a7242@amrita.edu/c90d8c3dd3654d4fa7af29ce6c6319907829757625615220928/calendar.ics"><i class="fas fa-calendar"></i> Academic Calendar</a>
+                <a href="helps.html"><i class="fas fa-question-circle"></i> Help Desk</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-book-open"></i>
+                    <span class="menu-text">Faculty Library</span>
+                </div>
+                <button class="toggle-sidebar" title="Toggle Sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="faculty.html" class="menu-item" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                <a href="books.html" class="menu-item" data-page="books">
+                    <i class="fas fa-book"></i>
+                    <span class="menu-text">Books Catalog</span>
+                </a>
+                <a href="journals.html" class="menu-item" data-page="journals">
+                    <i class="fas fa-newspaper"></i>
+                    <span class="menu-text">Journals</span>
+                </a>
+                <a href="papers.html" class="menu-item" data-page="papers">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="menu-text">Research Papers</span>
+                </a>
+                <a href="loans.html" class="menu-item" data-page="loans">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span class="menu-text">My Loans</span>
+                </a>
+                <a href="requests.html" class="menu-item" data-page="requests">
+                    <i class="fas fa-clock"></i>
+                    <span class="menu-text">Pending Requests</span>
+                </a>
+                <a href="bookmarks.html" class="menu-item active" data-page="bookmarks">
+                    <i class="fas fa-bookmark"></i>
+                    <span class="menu-text">Bookmarks</span>
+                </a>
+                <a href="reports.html" class="menu-item" data-page="reports">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="menu-text">Reports</span>
+                </a>
+                <a href="flsettings.html" class="menu-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span class="menu-text">Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="helps.html" class="menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="menu-text">Help & Support</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-container">
+                    <div>
+                        <h1 class="page-title">Bookmarks</h1>
+                        <div class="breadcrumbs">
+                            <a href="dashboard.html">Home</a>
+                            <span class="separator">/</span>
+                            <span>Bookmarks</span>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <div class="user-profile">
+                            <span>Dr. Smith</span>
+                            <div class="avatar">JS</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-container">
+                <div class="page-content active" id="bookmarks">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search bookmarks by title or author..." id="searchInput">
+                        <button type="button" id="searchBtn"><i class="fas fa-search"></i> Search</button>
+                    </div>
+
+                    <div class="books-grid">
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-details">
+                                <h3 class="book-title">Quantum Physics</h3>
+                                <p class="book-author">Albert Einstein</p>
+                                <div class="book-meta">
+                                    <span>ISBN: 978-0-998877-66-5</span>
+                                    <span>2022</span>
+                                </div>
+                                <div class="book-actions">
+                                    <button class="borrow-btn">Borrow</button>
+                                    <button class="remove-btn">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-details">
+                                <h3 class="book-title">Literary Theory</h3>
+                                <p class="book-author">Jane Austen</p>
+                                <div class="book-meta">
+                                    <span>ISBN: 978-0-112233-44-5</span>
+                                    <span>2019</span>
+                                </div>
+                                <div class="book-actions">
+                                    <button class="borrow-btn">Borrow</button>
+                                    <button class="remove-btn">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-details">
+                                <h3 class="book-title">The History of Science</h3>
+                                <p class="book-author">Mary Shelley</p>
+                                <div class="book-meta">
+                                    <span>ISBN: 978-0-987654-32-1</span>
+                                    <span>2018</span>
+                                </div>
+                                <div class="book-actions">
+                                    <button class="borrow-btn">Borrow</button>
+                                    <button class="remove-btn">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating decorative elements -->
+    <div class="floating-elements">
+        <div class="floating-book" style="top: 10%; left: 5%; animation-delay: 0s;"><i class="fas fa-book"></i></div>
+        <div class="floating-book" style="top: 30%; left: 15%; animation-delay: 2s;"><i class="fas fa-book-open"></i>
+        </div>
+        <div class="floating-book" style="top: 20%; left: 80%; animation-delay: 4s;"><i
+                class="fas fa-journal-whills"></i></div>
+        <div class="floating-book" style="top: 70%; left: 10%; animation-delay: 6s;"><i class="fas fa-scroll"></i></div>
+        <div class="floating-book" style="top: 60%; left: 75%; animation-delay: 8s;"><i class="fas fa-atlas"></i></div>
+        <div class="floating-book" style="top: 40%; left: 50%; animation-delay: 10s;"><i class="fas fa-book"></i></div>
+    </div>
+
+    <script>
+        const toggleSidebar = document.querySelector('.toggle-sidebar');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const bookCards = document.querySelectorAll('.book-card');
+
+        toggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-collapsed');
+        });
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        const floatingElements = document.querySelector('.floating-elements');
+        const bookIcons = ['fa-book', 'fa-book-open', 'fa-journal-whills', 'fa-scroll', 'fa-atlas'];
+        for (let i = 0; i < 8; i++) {
+            const book = document.createElement('div');
+            book.className = 'floating-book';
+            book.style.top = `${Math.random() * 90}%`;
+            book.style.left = `${Math.random() * 90}%`;
+            book.style.animationDelay = `${Math.random() * 15}s`;
+            book.innerHTML = `<i class="fas ${bookIcons[Math.floor(Math.random() * bookIcons.length)]}"></i>`;
+            floatingElements.appendChild(book);
+        }
+
+        searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.toLowerCase().trim();
+            bookCards.forEach(card => {
+                const title = card.querySelector('.book-title').textContent.toLowerCase();
+                const author = card.querySelector('.book-author').textContent.toLowerCase();
+                if (title.includes(query) || author.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        document.querySelectorAll('.borrow-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Borrow request sent! You will be notified once it is approved and check your email for updates.');
+                btn.textContent = 'Requested';
+                btn.style.backgroundColor = '#27ae60'; // green shade
+                btn.style.color = '#fff';
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+            });
+        });
+
+
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Bookmark removed!');
+                btn.closest('.book-card').remove();
+            });
+        });
+    </script>
+</body>
+
+</html>

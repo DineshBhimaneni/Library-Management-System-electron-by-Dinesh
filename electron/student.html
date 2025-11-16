@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="sidebar.css">
+    
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <div class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-book"></i> <span>NexusLib Pro</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="student.html" class="active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="bookcatalog.html"><i class="fas fa-book-open"></i> <span>Books Catalog</span></a></li>
+                <li><a href="Mybooks.html"><i class="fas fa-bookmark"></i> <span>My Books</span></a></li>
+                <li><a href="finesandpayments.html"><i class="fas fa-money-bill-wave"></i> <span>Fines & Payments</span></a></li>
+                <li><a href="ebook.html"><i class="fas fa-tablet-alt"></i> <span>E-Books</span></a></li>
+                <li><a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a></li>
+                <li><a href="help.html"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search books..." id="searchInput">
+            </div>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Card -->
+        <div class="welcome-card">
+            <h2>Welcome back, John!</h2>
+            <p>You have <span id="borrowedCount">3</span> books currently checked out. <span id="dueSoonCount">1</span> book is due soon.</p>
+            <div class="quick-actions">
+                <button class="action-btn" id="searchBooksBtn"><i class="fas fa-search"></i> Search Books</button>
+                <button class="action-btn" id="renewBooksBtn"><i class="fas fa-sync-alt"></i> Renew Books</button>
+                <button class="action-btn" id="payFinesBtn"><i class="fas fa-credit-card"></i> Pay Fines</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Books Borrowed</div>
+                        <div class="card-value" id="booksBorrowed">3</div>
+                    </div>
+                    <div class="card-icon books-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                </div>
+                <div class="card-footer"><span id="renewableCount">2</span> available for renewal</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Due Soon</div>
+                        <div class="card-value" id="dueSoonCard">1</div>
+                    </div>
+                    <div class="card-icon due-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="card-footer">Due in <span id="dueInDays">2</span> days</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Fines</div>
+                        <div class="card-value" id="finesAmount">$5.00</div>
+                    </div>
+                    <div class="card-icon fine-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+                <div class="card-footer"><span id="overdueCount">1</span> overdue book</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Reserved</div>
+                        <div class="card-value" id="reservedCount">1</div>
+                    </div>
+                    <div class="card-icon reserved-icon">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                </div>
+                <div class="card-footer">Ready for pickup</div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="notifications">
+            <div class="notifications-header">
+                <h3>Notifications</h3>
+                <a href="#" id="viewAllNotifications">View All</a>
+            </div>
+            <div class="notification notification-danger">
+                <div class="notification-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">Due Date Reminder</div>
+                    <div class="notification-message">Your book "Atomic Habits" is due in <span class="due-days">2</span> days</div>
+                    <div class="notification-time">Today, 10:30 AM</div>
+                </div>
+            </div>
+            <div class="notification notification-success">
+                <div class="notification-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">Reservation Available</div>
+                    <div class="notification-message">Your reserved book "The Alchemist" is now available for pickup</div>
+                    <div class="notification-time">Yesterday, 3:45 PM</div>
+                </div>
+            </div>
+            <div class="notification">
+                <div class="notification-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">Library Event</div>
+                    <div class="notification-message">Author talk with J.K. Rowling next Friday at 5 PM</div>
+                    <div class="notification-time">2 days ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books Section -->
+        <div class="section-header">
+            <h3 class="section-title">Recommended Books</h3>
+            <div class="books-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="available">Available</button>
+                <button class="filter-btn" data-filter="ebooks">E-Books</button>
+            </div>
+        </div>
+        <div class="books-grid" id="booksGrid">
+            <!-- Books will be dynamically loaded here -->
+        </div>
+
+        <!-- Currently Borrowed Books -->
+        <div class="section-header">
+            <h3 class="section-title">Currently Borrowed Books</h3>
+        </div>
+        <table class="data-table" id="borrowedBooksTable">
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Borrowed books will be dynamically loaded here -->
+            </tbody>
+        </table>
+
+        <!-- Reserved Books -->
+        <div class="section-header">
+            <h3 class="section-title">Reserved Books</h3>
+        </div>
+        <table class="data-table" id="reservedBooksTable">
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Reserved books will be dynamically loaded here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Initialize dark mode from localStorage
+        function initDarkMode() {
+            const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+            if (darkModeEnabled) {
+                document.body.classList.add('dark-mode');
+                const icon = document.getElementById('darkModeToggle').querySelector('i');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            const isDark = document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('darkModeToggle').querySelector('i');
+            
+            if (isDark) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+            
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Sample data for the dashboard
+        const userData = {
+            name: "John Doe",
+            role: "Student",
+            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+            borrowedBooks: 3,
+            dueSoon: 1,
+            dueInDays: 2,
+            fines: 5.00,
+            overdue: 1,
+            reserved: 1,
+            renewable: 2
+        };
+
+        const booksData = [
+            {
+                id: 1,
+                title: "Atomic Habits",
+                author: "James Clear",
+                cover: "https://m.media-amazon.com/images/I/51mN3bY0JjL.SY425.jpg",
+                pages: 320,
+                rating: 4.8,
+                status: "available",
+                type: "physical"
+            },
+            {
+                id: 2,
+                title: "The Psychology of Money",
+                author: "Morgan Housel",
+                cover: "https://m.media-amazon.com/images/I/41ZLnc34EiL.SY425.jpg",
+                pages: 256,
+                rating: 4.7,
+                status: "unavailable",
+                type: "physical"
+            },
+            {
+                id: 3,
+                title: "Deep Work",
+                author: "Cal Newport",
+                cover: "https://m.media-amazon.com/images/I/51T8OXMMBDS.SY425.jpg",
+                pages: 304,
+                rating: 4.6,
+                status: "available",
+                type: "physical"
+            },
+            {
+                id: 4,
+                title: "The Alchemist",
+                author: "Paulo Coelho",
+                cover: "https://m.media-amazon.com/images/I/51mN3bY0JjL.SY425.jpg",
+                pages: 208,
+                rating: 4.8,
+                status: "unavailable",
+                type: "physical"
+            },
+            {
+                id: 5,
+                title: "Digital Minimalism",
+                author: "Cal Newport",
+                cover: "https://m.media-amazon.com/images/I/51Q5BqdlRDL.SY425.jpg",
+                pages: 304,
+                rating: 4.5,
+                status: "available",
+                type: "ebook"
+            }
+        ];
+
+        const borrowedBooksData = [
+            {
+                id: 1,
+                title: "Atomic Habits",
+                author: "James Clear",
+                dueDate: "2024-05-15",
+                status: "due"
+            },
+            {
+                id: 2,
+                title: "The Psychology of Money",
+                author: "Morgan Housel",
+                dueDate: "2024-05-20",
+                status: "available"
+            },
+            {
+                id: 3,
+                title: "Deep Work",
+                author: "Cal Newport",
+                dueDate: "2024-05-05",
+                status: "overdue"
+            }
+        ];
+
+        const reservedBooksData = [
+            {
+                id: 4,
+                title: "The Alchemist",
+                author: "Paulo Coelho",
+                status: "ready"
+            }
+        ];
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const searchInput = document.getElementById('searchInput');
+        const booksGrid = document.getElementById('booksGrid');
+        const borrowedBooksTable = document.querySelector('#borrowedBooksTable tbody');
+        const reservedBooksTable = document.querySelector('#reservedBooksTable tbody');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const searchBooksBtn = document.getElementById('searchBooksBtn');
+        const renewBooksBtn = document.getElementById('renewBooksBtn');
+        const payFinesBtn = document.getElementById('payFinesBtn');
+        const viewAllNotifications = document.getElementById('viewAllNotifications');
+
+        // Initialize the dashboard
+        function initDashboard() {
+            // Set user data
+            document.querySelector('.user-name').textContent = userData.name;
+            document.querySelector('.user-role').textContent = userData.role;
+            document.querySelector('.user-profile img').src = userData.avatar;
+            
+            // Update dashboard cards
+            document.getElementById('borrowedCount').textContent = userData.borrowedBooks;
+            document.getElementById('dueSoonCount').textContent = userData.dueSoon;
+            document.getElementById('booksBorrowed').textContent = userData.borrowedBooks;
+            document.getElementById('dueSoonCard').textContent = userData.dueSoon;
+            document.getElementById('dueInDays').textContent = userData.dueInDays;
+            document.getElementById('finesAmount').textContent = `$${userData.fines.toFixed(2)}`;
+            document.getElementById('overdueCount').textContent = userData.overdue;
+            document.getElementById('reservedCount').textContent = userData.reserved;
+            document.getElementById('renewableCount').textContent = userData.renewable;
+            
+            // Load books
+            renderBooks(booksData);
+            renderBorrowedBooks(borrowedBooksData);
+            renderReservedBooks(reservedBooksData);
+        }
+
+        // Render books in the grid
+        function renderBooks(books) {
+            booksGrid.innerHTML = '';
+            
+            books.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                
+                bookCard.innerHTML = `
+                    <div class="book-cover">
+                        <img src="${book.cover}" alt="${book.title}">
+                        <div class="book-status ${book.status === 'available' ? '' : 'unavailable'}">
+                            ${book.status === 'available' ? 'Available' : 'Checked Out'}
+                        </div>
+                    </div>
+                    <div class="book-details">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-author">${book.author}</div>
+                        <div class="book-meta">
+                            <span><i class="fas fa-book"></i> ${book.pages} pages</span>
+                            <span><i class="fas fa-star"></i> ${book.rating}</span>
+                        </div>
+                        <button class="book-action ${book.status === 'available' ? '' : 'unavailable'}">
+                            ${book.status === 'available' ? 'Borrow' : 'Reserve'}
+                        </button>
+                    </div>
+                `;
+                
+                booksGrid.appendChild(bookCard);
+            });
+            
+            // Add event listeners to book actions
+            document.querySelectorAll('.book-action').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const bookCard = e.target.closest('.book-card');
+                    const bookTitle = bookCard.querySelector('.book-title').textContent;
+                    
+                    if (e.target.classList.contains('unavailable')) {
+                        alert(`You've reserved "${bookTitle}". Please pick it up within 3 days.`);
+                    } else {
+                        alert(`You've successfully borrowed "${bookTitle}". Due date is 14 days from today.`);
+                    }
+                });
+            });
+        }
+
+        // Render borrowed books table
+        function renderBorrowedBooks(books) {
+            borrowedBooksTable.innerHTML = '';
+            
+            books.forEach(book => {
+                const row = document.createElement('tr');
+                
+                let statusBadge;
+                if (book.status === 'due') {
+                    statusBadge = '<span class="status-badge status-due">Due Soon</span>';
+                } else if (book.status === 'overdue') {
+                    statusBadge = '<span class="status-badge status-overdue">Overdue</span>';
+                } else {
+                    statusBadge = '<span class="status-badge status-available">On Time</span>';
+                }
+                
+                row.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${formatDate(book.dueDate)}</td>
+                    <td>${statusBadge}</td>
+                    <td><button class="table-action ${book.status === 'overdue' ? 'btn-danger' : 'btn-primary'}">
+                        ${book.status === 'overdue' ? 'Return' : 'Renew'}
+                    </button></td>
+                `;
+                
+                borrowedBooksTable.appendChild(row);
+            });
+            
+            // Add event listeners to table actions
+            document.querySelectorAll('#borrowedBooksTable .table-action').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const row = e.target.closest('tr');
+                    const bookTitle = row.querySelector('td').textContent;
+                    
+                    if (e.target.classList.contains('btn-primary')) {
+                        alert(`${bookTitle} has been renewed. New due date is 14 days from today.`);
+                    } else if (e.target.classList.contains('btn-danger')) {
+                        alert(`${bookTitle} has been returned. Thank you!`);
+                    }
+                });
+            });
+        }
+
+        // Render reserved books table
+        function renderReservedBooks(books) {
+            reservedBooksTable.innerHTML = '';
+            
+            books.forEach(book => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td><span class="status-badge status-available">Ready for Pickup</span></td>
+                    <td><button class="table-action btn-warning">Borrow Now</button></td>
+                `;
+                
+                reservedBooksTable.appendChild(row);
+            });
+            
+            // Add event listeners to table actions
+            document.querySelectorAll('#reservedBooksTable .table-action').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const row = e.target.closest('tr');
+                    const bookTitle = row.querySelector('td').textContent;
+                    alert(`You've successfully borrowed "${bookTitle}". Due date is 14 days from today.`);
+                });
+            });
+        }
+
+        // Format date as "Month Day, Year"
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        // Filter books by type
+        function filterBooks(filter) {
+            let filteredBooks = [...booksData];
+            
+            if (filter === 'available') {
+                filteredBooks = filteredBooks.filter(book => book.status === 'available');
+            } else if (filter === 'ebooks') {
+                filteredBooks = filteredBooks.filter(book => book.type === 'ebook');
+            }
+            
+            renderBooks(filteredBooks);
+        }
+
+        // Search books by title or author
+        function searchBooks(query) {
+            if (!query) {
+                renderBooks(booksData);
+                return;
+            }
+            
+            const lowerQuery = query.toLowerCase();
+            const filteredBooks = booksData.filter(book => 
+                book.title.toLowerCase().includes(lowerQuery) || 
+                book.author.toLowerCase().includes(lowerQuery)
+            );
+            
+            renderBooks(filteredBooks);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+            initDashboard();
+            
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+
+            // Dark mode toggle
+            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    filterBooks(button.dataset.filter);
+                });
+            });
+
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchBooks(e.target.value);
+            });
+
+            // Quick action buttons
+            document.getElementById('searchBooksBtn').addEventListener('click', () => {
+                document.getElementById('searchInput').focus();
+            });
+
+            document.getElementById('renewBooksBtn').addEventListener('click', () => {
+                const renewableBooks = borrowedBooksData.filter(book => book.status !== 'overdue');
+                if (renewableBooks.length > 0) {
+                    alert(`You've renewed ${renewableBooks.length} books. New due dates are 14 days from today.`);
+                } else {
+                    alert("No books available for renewal.");
+                }
+            });
+
+            document.getElementById('payFinesBtn').addEventListener('click', () => {
+                alert(`Payment of $${userData.fines.toFixed(2)} processed successfully. Thank you!`);
+            });
+
+            // View all notifications
+            document.getElementById('viewAllNotifications').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert("Showing all notifications");
+            });
+        });
+    </script>
+</body>
+</html>

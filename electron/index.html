@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - Interactive Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --success: #38b000;
+            --warning: #ffaa00;
+            --danger: #ef233c;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #adb5bd;
+            --dark-gray: #495057;
+            --brown-door: #8B4513;
+            --door-frame: #5D4037;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--dark);
+            overflow: hidden;
+        }
+
+        /* Book Animation Styles */
+        .book-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .book {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            border-radius: 2px 5px 5px 2px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            transform-origin: left center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.7rem;
+            font-weight: bold;
+            opacity: 0;
+            animation: floatBook 15s linear infinite;
+        }
+
+        .book::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to right, #5D4037, #3E2723);
+            border-radius: 0 5px 5px 0;
+        }
+
+        .book-1 { animation-delay: 0s; left: 10%; top: 20%; }
+        .book-2 { animation-delay: 2s; left: 20%; top: 70%; }
+        .book-3 { animation-delay: 4s; left: 30%; top: 40%; }
+        .book-4 { animation-delay: 6s; left: 50%; top: 80%; }
+        .book-5 { animation-delay: 8s; left: 70%; top: 30%; }
+        .book-6 { animation-delay: 10s; left: 80%; top: 60%; }
+        .book-7 { animation-delay: 12s; left: 90%; top: 10%; }
+        .book-8 { animation-delay: 14s; left: 5%; top: 50%; }
+
+        @keyframes floatBook {
+            0% {
+                transform: translateY(100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(10deg);
+                opacity: 0;
+            }
+        }
+
+        /* Flying pages animation */
+        .page {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            opacity: 0;
+            animation: floatPage 20s linear infinite;
+            transform: rotate(10deg);
+        }
+
+        .page-1 { animation-delay: 1s; left: 15%; top: 30%; }
+        .page-2 { animation-delay: 3s; left: 25%; top: 80%; }
+        .page-3 { animation-delay: 5s; left: 35%; top: 50%; }
+        .page-4 { animation-delay: 7s; left: 55%; top: 90%; }
+        .page-5 { animation-delay: 9s; left: 75%; top: 40%; }
+        .page-6 { animation-delay: 11s; left: 85%; top: 70%; }
+        .page-7 { animation-delay: 13s; left: 95%; top: 20%; }
+        .page-8 { animation-delay: 15s; left: 10%; top: 60%; }
+
+        @keyframes floatPage {
+            0% {
+                transform: translateY(100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-left {
+            flex: 1;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+            z-index: 1;
+        }
+
+        .login-logo i {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+
+        .login-logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, white, #f8f9fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .login-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            z-index: 1;
+        }
+
+        .login-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            z-index: 1;
+        }
+
+        .login-features {
+            list-style: none;
+            margin-top: 2rem;
+            z-index: 1;
+        }
+
+        .login-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .login-features i {
+            color: var(--accent);
+        }
+
+        .login-right {
+            flex: 1.5;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .door-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .door-frame {
+            width: 300px;
+            height: 400px;
+            background-color: var(--door-frame);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .door {
+            width: 280px;
+            height: 380px;
+            background-color: var(--brown-door);
+            border-radius: 3px;
+            position: relative;
+            transform-origin: left;
+            transition: transform 1s ease-in-out;
+            cursor: pointer;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .door.open {
+            transform: perspective(1200px) rotateY(-120deg);
+        }
+
+        .door-knob {
+            width: 20px;
+            height: 20px;
+            background-color: #D4AF37;
+            border-radius: 50%;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .door-knob:hover {
+            animation: wiggle 0.5s infinite alternate;
+        }
+
+        .door-message {
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.3s;
+        }
+
+        .door.open .door-message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .door-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .door-subtitle {
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .door-click {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            position: absolute;
+            bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        .user-options {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            background: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .user-options.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .options-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+
+        .option-cards {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .option-card {
+            width: 200px;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .option-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .option-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .student-icon {
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+        }
+
+        .staff-icon {
+            background: linear-gradient(135deg, #f72585, #b5179e);
+        }
+
+        .faculty-icon {
+            background: linear-gradient(135deg, #38b000, #2b9348);
+        }
+
+        .option-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .option-description {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .back-to-door {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .back-to-door:hover {
+            text-decoration: underline;
+        }
+
+        /* Login Popup Styles */
+        .login-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .login-popup.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .login-form {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .login-popup.active .login-form {
+            transform: translateY(0);
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-popup:hover {
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .remember-me input {
+            accent-color: var(--primary);
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--gray);
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(0,0,0,0.1);
+            margin: 0 10px;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .social-btn.google {
+            color: #DB4437;
+        }
+
+        .social-btn.microsoft {
+            color: #0078D7;
+        }
+
+        .social-btn.apple {
+            color: #000000;
+        }
+
+        .register-link {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .form-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-user-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Error message styling for validation */
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        @keyframes wiggle {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        @media (max-width: 992px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-left {
+                padding: 2rem;
+            }
+
+            .login-right {
+                padding: 2rem;
+            }
+
+            .option-cards {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .option-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .door-frame {
+                width: 250px;
+                height: 350px;
+            }
+
+            .door {
+                width: 230px;
+                height: 330px;
+            }
+
+            .login-form {
+                padding: 1.5rem;
+            }
+            
+            .book, .page {
+                display: none; /* Hide animations on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Book Animation Background -->
+    <div class="book-animation">
+        <div class="book book-1">HTML</div>
+        <div class="book book-2">CSS</div>
+        <div class="book book-3">JS</div>
+        <div class="book book-4">React</div>
+        <div class="book book-5">Vue</div>
+        <div class="book book-6">Node</div>
+        <div class="book book-7">Python</div>
+        <div class="book book-8">Java</div>
+        <div class="page page-1"></div>
+        <div class="page page-2"></div>
+        <div class="page page-3"></div>
+        <div class="page page-4"></div>
+        <div class="page page-5"></div>
+        <div class="page page-6"></div>
+        <div class="page page-7"></div>
+        <div class="page page-8"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-left">
+            <div class="login-logo">
+                <i class="fas fa-book-open"></i>
+                <h1>NexusLib Pro</h1>
+            </div>
+            <h2 class="login-title">Welcome to Our Library</h2>
+            <p class="login-subtitle">Discover a world of knowledge behind our doors</p>
+            
+            <ul class="login-features">
+                <li><i class="fas fa-check-circle"></i> Access millions of books and resources</li>
+                <li><i class="fas fa-check-circle"></i> Manage your checkouts and reservations</li>
+                <li><i class="fas fa-check-circle"></i> Get personalized recommendations</li>
+                <li><i class="fas fa-check-circle"></i> Connect with your academic community</li>
+            </ul>
+        </div>
+        <div class="login-right">
+            <div class="door-container">
+                <div class="door-frame">
+                    <div class="door" id="library-door">
+                        <div class="door-knob"></div>
+                        <div class="door-message">
+                            <div class="door-title">Knowledge Awaits</div>
+                            <div class="door-subtitle">Choose your path to access our library resources</div>
+                        </div>
+                        <div class="door-click">Click the knob to enter</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-options" id="user-options">
+                <h3 class="options-title">Who are you?</h3>
+                <div class="option-cards">
+                    <div class="option-card" data-user="student">
+                        <div class="option-icon student-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h4 class="option-title">Student</h4>
+                        <p class="option-description">Access course materials and research papers</p>
+                    </div>
+                    <div class="option-card" data-user="staff">
+                        <div class="option-icon staff-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h4 class="option-title">Library Staff</h4>
+                        <p class="option-description">Manage library resources and systems</p>
+                    </div>
+                    <div class="option-card" data-user="faculty">
+                        <div class="option-icon faculty-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h4 class="option-title">Faculty</h4>
+                        <p class="option-description">Access academic resources and teaching tools</p>
+                    </div>
+                </div>
+                <a class="back-to-door" id="back-to-door">
+                    <i class="fas fa-arrow-left"></i> Back to door
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Login Popup -->
+    <div class="login-popup" id="student-popup">
+        <div class="login-form">
+            <div class="close-popup" id="close-student">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="form-header">
+                <div class="form-user-icon student-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h3 class="form-title">Student Login</h3>
+                <p class="form-subtitle">Sign in to access your student resources</p>
+            </div>
+            
+            <form id="student-form">
+                <div class="form-group">
+                    <label for="student-email" class="form-label">Student ID or Email</label>
+                    <div class="input-icon">
+                        <input type="text" id="student-email" class="form-control" placeholder="Enter your student ID or email" required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <span class="error-message" id="student-email-error">Please enter a valid email or ID</span>
+                </div>
+                <div class="form-group">
+                    <label for="student-password" class="form-label">Password</label>
+                    <div class="input-icon">
+                        <input type="password" id="student-password" class="form-control" placeholder="Enter your password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <span class="error-message" id="student-password-error">Password must be at least 8 characters</span>
+                </div>
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-student">
+                        <label for="remember-student">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                <button type="submit" class="login-btn">Login as Student</button>
+            </form>
+
+            <div class="login-divider">or continue with</div>
+            
+            <div class="social-login">
+                <div class="social-btn google">
+                    <i class="fab fa-google"></i>
+                </div>
+                <div class="social-btn microsoft">
+                    <i class="fab fa-microsoft"></i>
+                </div>
+                <div class="social-btn apple">
+                    <i class="fab fa-apple"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Staff Login Popup -->
+    <div class="login-popup" id="staff-popup">
+        <div class="login-form">
+            <div class="close-popup" id="close-staff">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="form-header">
+                <div class="form-user-icon staff-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="form-title">Staff Login</h3>
+                <p class="form-subtitle">Sign in to access the library management system</p>
+            </div>
+            
+            <form id="staff-form">
+                <div class="form-group">
+                    <label for="staff-email" class="form-label">Staff ID or Email</label>
+                    <div class="input-icon">
+                        <input type="text" id="staff-email" class="form-control" placeholder="Enter your staff ID or email" required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <span class="error-message" id="staff-email-error">Please enter a valid email or ID</span>
+                </div>
+                <div class="form-group">
+                    <label for="staff-password" class="form-label">Password</label>
+                    <div class="input-icon">
+                        <input type="password" id="staff-password" class="form-control" placeholder="Enter your password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <span class="error-message" id="staff-password-error">Password must be at least 8 characters</span>
+                </div>
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-staff">
+                        <label for="remember-staff">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                <button type="submit" class="login-btn">Login as Staff</button>
+            </form>
+
+            <div class="login-divider">or use secure access</div>
+            
+            <div class="social-login">
+                <div class="social-btn microsoft">
+                    <i class="fab fa-microsoft"></i>
+                </div>
+            </div>
+
+            <p class="register-link">Need help? <a href="#">Contact administrator</a></p>
+        </div>
+    </div>
+
+    <!-- Faculty Login Popup -->
+    <div class="login-popup" id="faculty-popup">
+        <div class="login-form">
+            <div class="close-popup" id="close-faculty">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="form-header">
+                <div class="form-user-icon faculty-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="form-title">Faculty Login</h3>
+                <p class="form-subtitle">Sign in to access academic resources</p>
+            </div>
+            
+            <form id="faculty-form">
+                <div class="form-group">
+                    <label for="faculty-email" class="form-label">Faculty ID or Email</label>
+                    <div class="input-icon">
+                        <input type="text" id="faculty-email" class="form-control" placeholder="Enter your faculty ID or email" required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <span class="error-message" id="faculty-email-error">Please enter a valid email or ID</span>
+                </div>
+                <div class="form-group">
+                    <label for="faculty-password" class="form-label">Password</label>
+                    <div class="input-icon">
+                        <input type="password" id="faculty-password" class="form-control" placeholder="Enter your password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <span class="error-message" id="faculty-password-error">Password must be at least 8 characters</span>
+                </div>
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-faculty">
+                        <label for="remember-faculty">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                <button type="submit" class="login-btn">Login as Faculty</button>
+            </form>
+
+            <div class="login-divider">or continue with</div>
+            
+            <div class="social-login">
+                <div class="social-btn google">
+                    <i class="fab fa-google"></i>
+                </div>
+                <div class="social-btn microsoft">
+                    <i class="fab fa-microsoft"></i>
+                </div>
+            </div>
+
+            <p class="register-link">New faculty member? <a href="#">Request access</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Door interaction
+        const door = document.getElementById('library-door');
+        const doorKnob = door.querySelector('.door-knob');
+        const userOptions = document.getElementById('user-options');
+        const backToDoor = document.getElementById('back-to-door');
+        
+        // Popup elements
+        const studentPopup = document.getElementById('student-popup');
+        const staffPopup = document.getElementById('staff-popup');
+        const facultyPopup = document.getElementById('faculty-popup');
+        const closeStudent = document.getElementById('close-student');
+        const closeStaff = document.getElementById('close-staff');
+        const closeFaculty = document.getElementById('close-faculty');
+        
+        // Forms
+        const studentForm = document.getElementById('student-form');
+        const staffForm = document.getElementById('staff-form');
+        const facultyForm = document.getElementById('faculty-form');
+
+        // Option cards
+        const optionCards = document.querySelectorAll('.option-card');
+
+        // Validation patterns
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email format
+        const idPattern = /^[a-zA-Z0-9]{4,}$/; // Alphanumeric ID, min 4 chars
+        const passwordMinLength = 8;
+
+        // Generic validation function
+        function validateForm(emailOrIdInput, passwordInput, emailError, passwordError) {
+            let isValid = true;
+
+            // Reset error messages
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+
+            // Validate email or ID
+            const emailOrId = emailOrIdInput.value.trim();
+            if (!emailOrId) {
+                emailError.textContent = 'This field is required';
+                emailError.style.display = 'block';
+                isValid = false;
+            } else if (!emailPattern.test(emailOrId) && !idPattern.test(emailOrId)) {
+                emailError.textContent = 'Please enter a valid email or ID (min 4 alphanumeric characters)';
+                emailError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate password
+            const password = passwordInput.value.trim();
+            if (!password) {
+                passwordError.textContent = 'Password is required';
+                passwordError.style.display = 'block';
+                isValid = false;
+            } else if (password.length < passwordMinLength) {
+                passwordError.textContent = `Password must be at least ${passwordMinLength} characters`;
+                passwordError.style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Click on door knob to open door
+        doorKnob.addEventListener('click', (e) => {
+            e.stopPropagation();
+            door.classList.add('open');
+            setTimeout(() => {
+                userOptions.classList.add('show');
+            }, 800);
+        });
+
+        // Click anywhere on door to open
+        door.addEventListener('click', () => {
+            if (!door.classList.contains('open')) {
+                door.classList.add('open');
+                setTimeout(() => {
+                    userOptions.classList.add('show');
+                }, 800);
+            }
+        });
+
+        // Back to door from options
+        backToDoor.addEventListener('click', () => {
+            userOptions.classList.remove('show');
+            setTimeout(() => {
+                door.classList.remove('open');
+            }, 300);
+        });
+
+        // Option card selection - show appropriate popup
+        optionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const userType = card.dataset.user;
+                document.getElementById(`${userType}-popup`).classList.add('active');
+            });
+        });
+
+        // Close popups
+        closeStudent.addEventListener('click', () => {
+            studentPopup.classList.remove('active');
+        });
+
+        closeStaff.addEventListener('click', () => {
+            staffPopup.classList.remove('active');
+        });
+
+        closeFaculty.addEventListener('click', () => {
+            facultyPopup.classList.remove('active');
+        });
+
+        // Close popup when clicking outside the form
+        [studentPopup, staffPopup, facultyPopup].forEach(popup => {
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    popup.classList.remove('active');
+                }
+            });
+        });
+
+        // Student form submission with validation
+        studentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailOrIdInput = document.getElementById('student-email');
+            const passwordInput = document.getElementById('student-password');
+            const emailError = document.getElementById('student-email-error');
+            const passwordError = document.getElementById('student-password-error');
+
+            if (validateForm(emailOrIdInput, passwordInput, emailError, passwordError)) {
+
+                window.location.href = 'student.html';
+            }
+        });
+
+        // Staff form submission with validation
+        staffForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailOrIdInput = document.getElementById('staff-email');
+            const passwordInput = document.getElementById('staff-password');
+            const emailError = document.getElementById('staff-email-error');
+            const passwordError = document.getElementById('staff-password-error');
+
+            if (validateForm(emailOrIdInput, passwordInput, emailError, passwordError)) {
+                // Simulate backend validation
+                window.location.href = 'staff.html';
+            }
+        });
+
+        // Faculty form submission with validation
+        facultyForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailOrIdInput = document.getElementById('faculty-email');
+            const passwordInput = document.getElementById('faculty-password');
+            const emailError = document.getElementById('faculty-email-error');
+            const passwordError = document.getElementById('faculty-password-error');
+
+            if (validateForm(emailOrIdInput, passwordInput, emailError, passwordError)) {
+                // Simulate backend validation
+                window.location.href = 'faculty.html';
+            }
+        });
+
+        // Social login buttons with redirection (no validation needed)
+        document.querySelectorAll('.social-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const popup = btn.closest('.login-popup');
+                let redirectUrl;
+                if (popup.id === 'student-popup') {
+                    redirectUrl = 'student.html';
+                } else if (popup.id === 'staff-popup') {
+                    redirectUrl = 'staff.html';
+                } else if (popup.id === 'faculty-popup') {
+                    redirectUrl = 'faculty.html';
+                }
+                // In a real app, integrate social login API here
+                window.location.href = redirectUrl;
+            });
+        });
+    </script>
+</body>
+</html>

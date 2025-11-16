@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - Advanced Library Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --success: #38b000;
+            --warning: #ffaa00;
+            --danger: #ef233c;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #adb5bd;
+            --dark-gray: #495057;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #4cc9f0;
+            --primary-dark: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #f72585;
+            --accent: #3a0ca3;
+            --dark: #f8f9fa;
+            --light: #121212;
+            --gray: #6c757d;
+            --dark-gray: #adb5bd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: var(--transition);
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            background: linear-gradient(to right, white, #f8f9fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+        }
+
+        nav a:hover {
+            transform: translateY(-2px);
+        }
+
+        nav a.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #darkModeToggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        #darkModeToggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-menu {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: var(--light);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 200px;
+            padding: 1rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 101;
+        }
+
+        .user-menu.active {
+            display: flex;
+        }
+
+        .user-menu a {
+            padding: 0.5rem;
+            border-radius: 5px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .user-menu a:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--primary);
+        }
+
+        .user-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--light);
+            padding: 2rem 1rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 99;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-item {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-item.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-item i {
+            font-size: 1.1rem;
+            width: 25px;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.1);
+            margin: 1rem 0;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            box-shadow: var(--shadow);
+            width: 300px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            background: transparent;
+            color: var(--dark);
+        }
+
+        .search-bar i {
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin: 0 auto 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .card-change {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .card-change.positive {
+            color: var(--success);
+        }
+
+        .card-change.negative {
+            color: var(--danger);
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .activity-item:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .activity-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.checkout {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+
+        .activity-icon.return {
+            background: linear-gradient(to right, #43e97b, #38f9d7);
+        }
+
+        .activity-icon.reservation {
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+        }
+
+        .activity-icon.new-book {
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+            align-self: flex-start;
+        }
+
+        /* Book Table */
+        .book-table-container {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .book-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .book-table th {
+            text-align: left;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .book-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: var(--light);
+        }
+
+        .book-table tr:nth-child(even) td {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .book-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .book-table tr:hover td {
+            background: rgba(67, 97, 238, 0.05) !important;
+        }
+
+        .book-cover {
+            width: 50px;
+            height: 70px;
+            border-radius: 5px;
+            object-fit: cover;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .book-author {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-available {
+            background: rgba(56, 176, 0, 0.1);
+            color: var(--success);
+        }
+
+        .status-checkedout {
+            background: rgba(239, 35, 60, 0.1);
+            color: var(--danger);
+        }
+
+        .status-reserved {
+            background: rgba(255, 170, 0, 0.1);
+            color: var(--warning);
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .action-btn i {
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(67, 97, 238, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #2b9348);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #d00000);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #ff9500);
+            color: var(--dark);
+        }
+
+        /* Calendar Section */
+        .calendar-container {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .calendar-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--light);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Analytics Chart */
+        .analytics-container {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        /* Scroll to Top Button */
+        #scrollToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transition: var(--transition);
+        }
+
+        #scrollToTopBtn:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-book-open"></i>
+            <h1>NexusLib Pro</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">Books</a></li>
+                <li><a href="#">Members</a></li>
+                <li><a href="#">Transactions</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </nav>
+        <div class="user-actions">
+            <button id="darkModeToggle">🌙 Dark Mode</button>
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar">AD</div>
+                <span>Admin</span>
+                <div class="user-menu" id="userMenu">
+                    <a href="#"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="#" class="sidebar-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-book"></i>
+                    <span>Books Catalog</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-users"></i>
+                    <span>Members</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transactions</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Reservations</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Library Dashboard</h1>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search books, members...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+
+            <div class="dashboard-cards">
+                <div class="card fade-in" style="animation-delay: 0.1s;">
+                    <div class="card-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="card-title">Total Books</div>
+                    <div class="card-value">2,458</div>
+                    <div class="card-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>12% from last month</span>
+                    </div>
+                </div>
+                <div class="card fade-in" style="animation-delay: 0.2s;">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-title">Active Members</div>
+                    <div class="card-value">1,245</div>
+                    <div class="card-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>5% from last month</span>
+                    </div>
+                </div>
+                <div class="card fade-in" style="animation-delay: 0.3s;">
+                    <div class="card-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="card-title">Today's Checkouts</div>
+                    <div class="card-value">87</div>
+                    <div class="card-change negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>3% from yesterday</span>
+                    </div>
+                </div>
+                <div class="card fade-in" style="animation-delay: 0.4s;">
+                    <div class="card-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="card-title">Overdue Books</div>
+                    <div class="card-value">32</div>
+                    <div class="card-change positive">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>8% from last week</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-container">
+                <div class="section-header">
+                    <h2 class="section-title">Library Analytics</h2>
+                </div>
+                <canvas id="analyticsChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="calendar-container">
+                <div class="section-header">
+                    <h2 class="section-title">Library Calendar</h2>
+                    <div class="calendar-actions">
+                        <button class="action-btn btn-outline" id="monthViewBtn">Month View</button>
+                        <button class="action-btn btn-outline" id="weekViewBtn">Week View</button>
+                        <button class="action-btn btn-outline" id="dayViewBtn">Day View</button>
+                        <button class="action-btn btn-primary" id="exportCalendarBtn">Export Calendar</button>
+                    </div>
+                </div>
+                <div id="calendar"></div>
+            </div>
+
+            <div class="recent-activity">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Activity</h2>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item fade-in" style="animation-delay: 0.1s;">
+                        <div class="activity-icon checkout">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">Book Checked Out</div>
+                            <div class="activity-description">"The Silent Patient" by Alex Michaelides</div>
+                        </div>
+                        <div class="activity-time">10 min ago</div>
+                    </div>
+                    <div class="activity-item fade-in" style="animation-delay: 0.2s;">
+                        <div class="activity-icon return">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">Book Returned</div>
+                            <div class="activity-description">"Educated" by Tara Westover</div>
+                        </div>
+                        <div class="activity-time">25 min ago</div>
+                    </div>
+                    <div class="activity-item fade-in" style="animation-delay: 0.3s;">
+                        <div class="activity-icon reservation">
+                            <i class="fas fa-bookmark"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">New Reservation</div>
+                            <div class="activity-description">"Atomic Habits" by James Clear</div>
+                        </div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                    <div class="activity-item fade-in" style="animation-delay: 0.4s;">
+                        <div class="activity-icon new-book">
+                            <i class="fas fa-book-medical"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">New Book Added</div>
+                            <div class="activity-description">"Project Hail Mary" by Andy Weir</div>
+                        </div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-table-container">
+                <div class="section-header">
+                    <h2 class="section-title">Recently Added Books</h2>
+                    <div>
+                        <button class="action-btn btn-primary" id="addBookBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Book
+                        </button>
+                        <button class="action-btn btn-outline" id="scanBarcodeBtn">
+                            <i class="fas fa-barcode"></i>
+                            Scan Barcode
+                        </button>
+                    </div>
+                </div>
+                <table class="book-table">
+                    <thead>
+                        <tr>
+                            <th>Cover</th>
+                            <th>Title & Author</th>
+                            <th>ISBN</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fade-in" style="animation-delay: 0.1s;">
+                            <td><img src="https://via.placeholder.com/50x70" alt="Book Cover" class="book-cover"></td>
+                            <td>
+                                <div class="book-title">The Midnight Library</div>
+                                <div class="book-author">Matt Haig</div>
+                            </td>
+                            <td>978-0525559474</td>
+                            <td>Fiction</td>
+                            <td><span class="status-badge status-available">Available</span></td>
+                            <td>
+                                <button class="action-btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="action-btn btn-success">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Borrow
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="fade-in" style="animation-delay: 0.2s;">
+                            <td><img src="https://via.placeholder.com/50x70" alt="Book Cover" class="book-cover"></td>
+                            <td>
+                                <div class="book-title">Atomic Habits</div>
+                                <div class="book-author">James Clear</div>
+                            </td>
+                            <td>978-0735211292</td>
+                            <td>Self-Help</td>
+                            <td><span class="status-badge status-checkedout">Checked Out</span></td>
+                            <td>
+                                <button class="action-btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="action-btn btn-warning">
+                                    <i class="fas fa-undo"></i>
+                                    Return
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="fade-in" style="animation-delay: 0.3s;">
+                            <td><img src="https://via.placeholder.com/50x70" alt="Book Cover" class="book-cover"></td>
+                            <td>
+                                <div class="book-title">Project Hail Mary</div>
+                                <div class="book-author">Andy Weir</div>
+                            </td>
+                            <td>978-0593135204</td>
+                            <td>Science Fiction</td>
+                            <td><span class="status-badge status-reserved">Reserved</span></td>
+                            <td>
+                                <button class="action-btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="fade-in" style="animation-delay: 0.4s;">
+                            <td><img src="https://via.placeholder.com/50x70" alt="Book Cover" class="book-cover"></td>
+                            <td>
+                                <div class="book-title">The Four Winds</div>
+                                <div class="book-author">Kristin Hannah</div>
+                            </td>
+                            <td>978-1250178602</td>
+                            <td>Historical Fiction</td>
+                            <td><span class="status-badge status-available">Available</span></td>
+                            <td>
+                                <button class="action-btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="action-btn btn-success">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Borrow
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="fade-in" style="animation-delay: 0.5s;">
+                            <td><img src="https://via.placeholder.com/50x70" alt="Book Cover" class="book-cover"></td>
+                            <td>
+                                <div class="book-title">Klara and the Sun</div>
+                                <div class="book-author">Kazuo Ishiguro</div>
+                            </td>
+                            <td>978-0593318171</td>
+                            <td>Science Fiction</td>
+                            <td><span class="status-badge status-available">Available</span></td>
+                            <td>
+                                <button class="action-btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                                <button class="action-btn btn-success">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Borrow
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div class="modal-overlay" id="addBookModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Book</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addBookForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookTitle" class="form-label">Book Title</label>
+                            <input type="text" id="bookTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookAuthor" class="form-label">Author</label>
+                            <input type="text" id="bookAuthor" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookIsbn" class="form-label">ISBN</label>
+                            <input type="text" id="bookIsbn" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookCategory" class="form-label">Category</label>
+                            <select id="bookCategory" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="Fiction">Fiction</option>
+                                <option value="Non-Fiction">Non-Fiction</option>
+                                <option value="Science Fiction">Science Fiction</option>
+                                <option value="Fantasy">Fantasy</option>
+                                <option value="Mystery">Mystery</option>
+                                <option value="Romance">Romance</option>
+                                <option value="Biography">Biography</option>
+                                <option value="Self-Help">Self-Help</option>
+                                <option value="History">History</option>
+                                <option value="Science">Science</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookPublisher" class="form-label">Publisher</label>
+                            <input type="text" id="bookPublisher" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookYear" class="form-label">Publication Year</label>
+                            <input type="number" id="bookYear" class="form-control" min="1900" max="2023">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookDescription" class="form-label">Description</label>
+                        <textarea id="bookDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCover" class="form-label">Book Cover</label>
+                        <input type="file" id="bookCover" class="form-control" accept="image/*">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn btn-outline" id="cancelAddBook">Cancel</button>
+                <button class="action-btn btn-primary" id="submitAddBook">Add Book</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div class="modal-overlay" id="addMemberModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Member</h3>
+                <button class="modal-close" id="closeMemberModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addMemberForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="memberName" class="form-label">Full Name</label>
+                            <input type="text" id="memberName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="memberEmail" class="form-label">Email</label>
+                            <input type="email" id="memberEmail" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="memberPhone" class="form-label">Phone Number</label>
+                            <input type="tel" id="memberPhone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="memberId" class="form-label">Member ID</label>
+                            <input type="text" id="memberId" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberAddress" class="form-label">Address</label>
+                        <textarea id="memberAddress" class="form-control" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn btn-outline" id="cancelAddMember">Cancel</button>
+                <button class="action-btn btn-primary" id="submitAddMember">Add Member</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="scrollToTopBtn"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const htmlElement = document.documentElement;
+
+        // Check if dark mode is enabled in localStorage
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            htmlElement.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀ Light Mode';
+        }
+
+        // Toggle Dark Mode
+        darkModeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark-mode');
+            if (htmlElement.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.textContent = '☀ Light Mode';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.textContent = '🌙 Dark Mode';
+            }
+        });
+
+        // User Profile Dropdown
+        const userProfile = document.getElementById('userProfile');
+        const userMenu = document.getElementById('userMenu');
+
+        userProfile.addEventListener('click', () => {
+            userMenu.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userProfile.contains(e.target)) {
+                userMenu.classList.remove('active');
+            }
+        });
+
+        // Modal Handling
+        const addBookBtn = document.getElementById('addBookBtn');
+        const addBookModal = document.getElementById('addBookModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelAddBook = document.getElementById('cancelAddBook');
+
+        addBookBtn.addEventListener('click', () => {
+            addBookModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeModalFunc = () => {
+            addBookModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+
+        closeModal.addEventListener('click', closeModalFunc);
+        cancelAddBook.addEventListener('click', closeModalFunc);
+
+        // Close modal when clicking outside
+        addBookModal.addEventListener('click', (e) => {
+            if (e.target === addBookModal) {
+                closeModalFunc();
+            }
+        });
+
+        // Form Submission
+        const addBookForm = document.getElementById('addBookForm');
+        const submitAddBook = document.getElementById('submitAddBook');
+
+        submitAddBook.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (addBookForm.checkValidity()) {
+                alert('Book added successfully!');
+                addBookForm.reset();
+                closeModalFunc();
+            } else {
+                addBookForm.reportValidity();
+            }
+        });
+
+        // Sidebar active item highlighting
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', () => {
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Nav active item highlighting
+        const navItems = document.querySelectorAll('nav a');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-bar input');
+        const searchIcon = document.querySelector('.search-bar i');
+
+        searchIcon.addEventListener('click', () => {
+            if (searchInput.value.trim()) {
+                alert(`Searching for: ${searchInput.value}`);
+            }
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && searchInput.value.trim()) {
+                alert(`Searching for: ${searchInput.value}`);
+            }
+        });
+
+        // Animation on scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.style.opacity = '1';
+                }
+            });
+        };
+
+        // Initialize elements as invisible
+        fadeElements.forEach(element => {
+            element.style.opacity = '0';
+        });
+
+        window.addEventListener('scroll', fadeInOnScroll);
+        window.addEventListener('load', fadeInOnScroll);
+
+        // Scroll to Top Button
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+        window.addEventListener('scroll', () => {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = 'block';
+            } else {
+                scrollToTopBtn.style.display = 'none';
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Calendar Integration
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: 'Book Due: The Midnight Library',
+                        start: '2023-06-15',
+                        backgroundColor: '#ef233c',
+                        borderColor: '#ef233c'
+                    },
+                    {
+                        title: 'Book Due: Atomic Habits',
+                        start: '2023-06-18',
+                        backgroundColor: '#ef233c',
+                        borderColor: '#ef233c'
+                    },
+                    {
+                        title: 'Library Workshop',
+                        start: '2023-06-20',
+                        end: '2023-06-22',
+                        backgroundColor: '#4361ee',
+                        borderColor: '#4361ee'
+                    },
+                    {
+                        title: 'New Book Arrival',
+                        start: '2023-06-25',
+                        backgroundColor: '#38b000',
+                        borderColor: '#38b000'
+                    }
+                ],
+                eventClick: function(info) {
+                    alert('Event: ' + info.event.title);
+                }
+            });
+
+            calendar.render();
+
+            // View Change Buttons
+            document.getElementById('monthViewBtn').addEventListener('click', () => calendar.changeView('dayGridMonth'));
+            document.getElementById('weekViewBtn').addEventListener('click', () => calendar.changeView('timeGridWeek'));
+            document.getElementById('dayViewBtn').addEventListener('click', () => calendar.changeView('timeGridDay'));
+
+            // Export Calendar Button
+            document.getElementById('exportCalendarBtn').addEventListener('click', () => {
+                alert('Calendar exported successfully!');
+            });
+        });
+
+        // Analytics Chart
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        const analyticsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Books', 'Active Members', 'Checkouts', 'Overdue'],
+                datasets: [{
+                    label: 'Library Statistics',
+                    data: [2458, 1245, 87, 32],
+                    backgroundColor: [
+                        'rgba(67, 97, 238, 0.7)',
+                        'rgba(247, 37, 133, 0.7)',
+                        'rgba(76, 201, 240, 0.7)',
+                        'rgba(239, 35, 60, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(67, 97, 238, 1)',
+                        'rgba(247, 37, 133, 1)',
+                        'rgba(76, 201, 240, 1)',
+                        'rgba(239, 35, 60, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 500
+                        }
+                    }
+                }
+            }
+        });
+
+        // Barcode Scanning
+        document.getElementById('scanBarcodeBtn').addEventListener('click', () => {
+            const barcode = prompt("Enter book barcode:");
+            if (barcode) {
+                alert(`Searching for book with barcode: ${barcode}`);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Library Portal | Journals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Same CSS as dashboard.html and books.html */
+        :root {
+            /* Light Mode Colors */
+            --primary-light: #2c3e50;
+            --secondary-light: #3498db;
+            --accent-light: #e74c3c;
+            --background-light: #f5f7fa;
+            --card-light: #ffffff;
+            --text-light: #333333;
+            --text-secondary-light: #666666;
+            --border-light: #e0e0e0;
+            --gold-light: #f1c40f;
+            
+            /* Dark Mode Colors */
+            --primary-dark: #e0e0e0;
+            --secondary-dark: #5dade2;
+            --accent-dark: #e74c3c;
+            --background-dark: #121a24;
+            --card-dark: #1a2433;
+            --text-dark: #f0f0f0;
+            --text-secondary-dark: #b0b0b0;
+            --border-dark: #2a3a4d;
+            --gold-dark: #f1c40f;
+            
+            /* Common Variables */
+            --sidebar-width: 280px;
+            --header-height: 80px;
+            --top-header-height: 50px;
+            --transition-speed: 0.3s;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+        
+        body.dark-mode {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --accent: var(--accent-dark);
+            --background: var(--background-dark);
+            --card: var(--card-dark);
+            --text: var(--text-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border: var(--border-dark);
+            --gold: var(--gold-dark);
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+        
+        body:not(.dark-mode) {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --accent: var(--accent-light);
+            --background: var(--background-light);
+            --card: var(--card-light);
+            --text: var(--text-light);
+            --text-secondary: var(--text-secondary-light);
+            --border: var(--border-light);
+            --gold: var(--gold-light);
+        }
+        
+        .top-header {
+            background: var(--primary-light);
+            color: white;
+            height: var(--top-header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            font-size: 0.9rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 200;
+        }
+        
+        .top-header-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .top-header-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .top-header-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .top-header-links a:hover { opacity: 0.8; }
+        
+        .top-header-links i { margin-right: 0.3rem; }
+        
+        .dark-mode .top-header {
+            background: var(--card-dark);
+            border-bottom: 1px solid var(--border-dark);
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary-light);
+            color: white;
+            height: calc(100vh - var(--top-header-height));
+            position: fixed;
+            transition: all var(--transition-speed) ease;
+            z-index: 100;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .dark-mode .sidebar {
+            background: var(--card-dark);
+            border-right: 1px solid var(--border-dark);
+        }
+        
+        .welcome-card, .stat-card, .action-btn, .recent-activity, .book-card, .journal-item, .loans-tab {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        h1, h2, h3, h4, h5, h6, .page-title, .book-title, .journal-title, .activity-content h4 {
+            color: var(--text);
+        }
+        
+        p, .book-author, .journal-publisher, .activity-content p, .activity-time, .text-secondary {
+            color: var(--text-secondary);
+        }
+        
+        input, select, .search-bar input {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            padding-top: var(--top-header-height);
+        }
+        
+        .sidebar-collapsed { transform: translateX(calc(var(--sidebar-width) * -1 + 60px)); }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            height: var(--header-height);
+        }
+        
+        .sidebar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+        
+        .sidebar-logo i {
+            margin-right: 0.8rem;
+            color: var(--gold);
+            animation: pulse 2s infinite;
+        }
+        
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform var(--transition-speed) ease;
+        }
+        
+        .sidebar-collapsed .toggle-sidebar { transform: rotate(180deg); }
+        
+        .sidebar-menu { padding: 1.5rem 0; }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            margin: 0.2rem 0;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .menu-item:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .menu-item.active {
+            color: white;
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--gold);
+        }
+        
+        .menu-item i {
+            margin-right: 1rem;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .menu-text { transition: opacity var(--transition-speed) ease; }
+        
+        .sidebar-collapsed .menu-text { opacity: 0; width: 0; }
+        
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: margin-left var(--transition-speed) ease;
+            min-height: calc(100vh - var(--top-header-height));
+        }
+        
+        .sidebar-collapsed + .main-content { margin-left: 60px; }
+        
+        .header {
+            background: var(--background);
+            color: var(--text);
+            padding: 1rem 0;
+            position: sticky;
+            top: var(--top-header-height);
+            z-index: 90;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .page-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; }
+        
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumbs a { color: var(--secondary); text-decoration: none; }
+        
+        .breadcrumbs .separator { opacity: 0.6; }
+        
+        .header-actions { display: flex; align-items: center; gap: 1.5rem; }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover { transform: rotate(30deg); }
+        
+        .user-profile { display: flex; align-items: center; gap: 1rem; }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .avatar:hover { transform: scale(1.1); }
+        
+        .avatar::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            animation: ripple 1.5s infinite;
+            opacity: 0;
+        }
+        
+        .avatar:hover::after { opacity: 0.7; }
+        
+        .content-container { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+        
+        /* Journals Styles */
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(52,152,219,0.2);
+        }
+        
+        .search-bar button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .search-bar button:hover { background: var(--primary); }
+        
+        .journals-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .journal-item {
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .journal-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .journal-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(52,152,219,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .journal-info { flex: 1; }
+        
+        .journal-title { font-weight: 600; margin-bottom: 0.3rem; }
+        
+        .journal-publisher { margin-bottom: 0.5rem; opacity: 0.8; }
+        
+        .journal-meta { display: flex; gap: 1rem; font-size: 0.8rem; opacity: 0.7; }
+        
+        .journal-actions button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .journal-actions button:hover { background: var(--primary); }
+        
+        .floating-elements {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .floating-book {
+            position: absolute;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { transform: translate(100vw, -100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(calc(var(--sidebar-width) * -1 + 60px)); }
+            .sidebar-collapsed { transform: translateX(0); }
+            .main-content { margin-left: 60px; }
+            .sidebar-collapsed + .main-content { margin-left: var(--sidebar-width); }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); width: 280px; }
+            .sidebar-collapsed { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .sidebar-collapsed + .main-content { margin-left: 0; }
+        }
+        
+        @media (max-width: 576px) {
+            .header-container { padding: 0 1rem; }
+            .content-container { padding: 1rem; }
+            .search-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header class="top-header">
+        <div class="top-header-container">
+            <div class="university-info">
+                <i class="fas fa-university"></i>
+                <span>University of Knowledge</span>
+            </div>
+            <div class="top-header-links">
+                <a href="mailto:faculty@university.edu"><i class="fas fa-envelope"></i> Faculty Mail</a>
+                <a href="https://outlook.office365.com/owa/calendar/c5368a2f38a14425b7bfe0806e6a7242@amrita.edu/c90d8c3dd3654d4fa7af29ce6c6319907829757625615220928/calendar.ics"><i class="fas fa-calendar"></i> Academic Calendar</a>
+                <a href="helps.html"><i class="fas fa-question-circle"></i> Help Desk</a>
+            </div>
+        </div>
+    </header>
+    
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-book-open"></i>
+                    <span class="menu-text">Faculty Library</span>
+                </div>
+                <button class="toggle-sidebar" title="Toggle Sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="faculty.html" class="menu-item" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                <a href="books.html" class="menu-item" data-page="books">
+                    <i class="fas fa-book"></i>
+                    <span class="menu-text">Books Catalog</span>
+                </a>
+                <a href="journals.html" class="menu-item active" data-page="journals">
+                    <i class="fas fa-newspaper"></i>
+                    <span class="menu-text">Journals</span>
+                </a>
+                <a href="papers.html" class="menu-item" data-page="papers">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="menu-text">Research Papers</span>
+                </a>
+                <a href="loans.html" class="menu-item" data-page="loans">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span class="menu-text">My Loans</span>
+                </a>
+                <a href="requests.html" class="menu-item" data-page="requests">
+                    <i class="fas fa-clock"></i>
+                    <span class="menu-text">Pending Requests</span>
+                </a>
+                <a href="bookmarks.html" class="menu-item" data-page="bookmarks">
+                    <i class="fas fa-bookmark"></i>
+                    <span class="menu-text">Bookmarks</span>
+                </a>
+                <a href="reports.html" class="menu-item" data-page="reports">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="menu-text">Reports</span>
+                </a>
+                <a href="flsettings.html" class="menu-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span class="menu-text">Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="helps.html" class="menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="menu-text">Help & Support</span>
+                </a>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="header">
+                <div class="header-container">
+                    <div>
+                        <h1 class="page-title">Journals</h1>
+                        <div class="breadcrumbs">
+                            <a href="dashboard.html">Home</a>
+                            <span class="separator">/</span>
+                            <span>Journals</span>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <div class="user-profile">
+                            <span>Dr. Smith</span>
+                            <div class="avatar">JS</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-container">
+                <div class="page-content active" id="journals">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search journals by title or publisher..." id="searchInput">
+                        <button type="button" id="searchBtn"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                    
+                    <div class="journals-list" id="journalsList">
+                        <!-- Journals will be loaded here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div class="floating-elements">
+        <div class="floating-book" style="top: 10%; left: 5%; animation-delay: 0s;"><i class="fas fa-book"></i></div>
+        <div class="floating-book" style="top: 30%; left: 15%; animation-delay: 2s;"><i class="fas fa-book-open"></i></div>
+        <div class="floating-book" style="top: 20%; left: 80%; animation-delay: 4s;"><i class="fas fa-journal-whills"></i></div>
+        <div class="floating-book" style="top: 70%; left: 10%; animation-delay: 6s;"><i class="fas fa-scroll"></i></div>
+        <div class="floating-book" style="top: 60%; left: 75%; animation-delay: 8s;"><i class="fas fa-atlas"></i></div>
+        <div class="floating-book" style="top: 40%; left: 50%; animation-delay: 10s;"><i class="fas fa-book"></i></div>
+    </div>
+    
+    <script>
+        // Journal database with real links
+        const journals = [
+            {
+                id: 1,
+                title: "Nature",
+                publisher: "Nature Publishing Group",
+                volume: "615",
+                issue: "7951",
+                year: "2023",
+                link: "https://www.nature.com/nature/volumes/615/issues/7951"
+            },
+            {
+                id: 2,
+                title: "Science",
+                publisher: "American Association for the Advancement of Science",
+                volume: "379",
+                issue: "6634",
+                year: "2023",
+                link: "https://www.science.org/toc/science/379/6634"
+            },
+            {
+                id: 3,
+                title: "The Lancet",
+                publisher: "Elsevier",
+                volume: "401",
+                issue: "10377",
+                year: "2023",
+                link: "https://www.thelancet.com/journals/lancet/issue/vol401no10377/PIIS0140-6736(23)X0005-3"
+            },
+            {
+                id: 4,
+                title: "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+                publisher: "IEEE",
+                volume: "44",
+                issue: "12",
+                year: "2022",
+                link: "https://ieeexplore.ieee.org/xpl/tocresult.jsp?isnumber=9887421"
+            },
+            {
+                id: 5,
+                title: "Journal of the American Chemical Society",
+                publisher: "American Chemical Society",
+                volume: "144",
+                issue: "48",
+                year: "2022",
+                link: "https://pubs.acs.org/toc/jacsat/144/48"
+            }
+        ];
+
+        // Function to render journals
+        function renderJournals(journalsToRender = journals) {
+            const journalsList = document.getElementById('journalsList');
+            journalsList.innerHTML = '';
+            
+            if (journalsToRender.length === 0) {
+                journalsList.innerHTML = '<div class="journal-item">No journals found matching your search.</div>';
+                return;
+            }
+            
+            journalsToRender.forEach(journal => {
+                const journalItem = document.createElement('div');
+                journalItem.className = 'journal-item';
+                journalItem.innerHTML = `
+                    <div class="journal-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="journal-info">
+                        <h3 class="journal-title">${journal.title}</h3>
+                        <p class="journal-publisher">${journal.publisher}</p>
+                        <div class="journal-meta">
+                            <span>Vol. ${journal.volume}, Issue ${journal.issue}</span>
+                            <span>${journal.year}</span>
+                        </div>
+                    </div>
+                    <div class="journal-actions">
+                        <button class="view-btn" data-link="${journal.link}">View</button>
+                    </div>
+                `;
+                journalsList.appendChild(journalItem);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const link = e.target.getAttribute('data-link');
+                    window.open(link, '_blank');
+                });
+            });
+        }
+        
+        // Search functionality
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredJournals = journals.filter(journal => 
+                journal.title.toLowerCase().includes(searchTerm) || 
+                journal.publisher.toLowerCase().includes(searchTerm)
+            );
+            renderJournals(filteredJournals);
+        });
+        
+        // Initialize with all journals
+        renderJournals();
+
+        // Toggle sidebar
+        const toggleSidebar = document.querySelector('.toggle-sidebar');
+        const sidebar = document.querySelector('.sidebar');
+        
+        toggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-collapsed');
+        });
+        
+        // Dark/light mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        // Floating elements
+        const floatingElements = document.querySelector('.floating-elements');
+        const bookIcons = ['fa-book', 'fa-book-open', 'fa-journal-whills', 'fa-scroll', 'fa-atlas'];
+        
+        for (let i = 0; i < 8; i++) {
+            const book = document.createElement('div');
+            book.className = 'floating-book';
+            book.style.top = `${Math.random() * 90}%`;
+            book.style.left = `${Math.random() * 90}%`;
+            book.style.animationDelay = `${Math.random() * 15}s`;
+            book.innerHTML = `<i class="fas ${bookIcons[Math.floor(Math.random() * bookIcons.length)]}"></i>`;
+            floatingElements.appendChild(book);
+        }
+    </script>
+</body>
+</html>

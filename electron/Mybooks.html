@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - My Books</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Your existing CSS -->
+    <link rel="stylesheet" href="sidebar.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #f5f5f5;
+            --accent: #e67e22;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text: #333;
+            --text-light: #7f8c8d;
+        }
+        
+        
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            background-color: white;
+            color: var(--primary);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0 15px;
+        }
+        
+        .filter-options select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            background-color: var(--secondary);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    <div class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-book"></i> <span>NexusLib Pro</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="student.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="bookcatalog.html"><i class="fas fa-book-open"></i> <span>Books Catalog</span></a></li>
+                <li><a href="Mybooks.html" class="active"><i class="fas fa-bookmark"></i> <span>My Books</span></a></li>
+                <li><a href="finesandpayments.html"><i class="fas fa-money-bill-wave"></i> <span>Fines & Payments</span></a></li>
+                <li><a href="ebook.html"><i class="fas fa-tablet-alt"></i> <span>E-Books</span></a></li>
+                <li><a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a></li>
+                <li><a href="help.html"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search my books...">
+            </div>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <h2>My Books</h2>
+            <p>Manage your currently borrowed books here.</p>
+            <div class="quick-actions">
+                <button class="action-btn" id="renewAllBtn"><i class="fas fa-sync-alt"></i> Renew All</button>
+                <button class="action-btn" id="returnAllBtn"><i class="fas fa-book"></i> Return All</button>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h3 class="section-title">Currently Borrowed</h3>
+            <div class="filter-options">
+                <label for="statusFilter" class="visually-hidden">Filter by Status</label>
+                <select id="statusFilter">
+                    <option value="all">All Books</option>
+                    <option value="due">Due Soon</option>
+                    <option value="overdue">Overdue</option>
+                    <option value="available">Available</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="data-table" id="booksTable">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-status="due">
+                        <td>Atomic Habits</td>
+                        <td>James Clear</td>
+                        <td data-date="2025-04-15">April 15, 2025</td>
+                        <td><span class="status-badge status-due">Due Soon</span></td>
+                        <td class="actions-cell">
+                            <button class="table-action btn-primary renew-btn">Renew</button>
+                            <button class="table-action btn-danger return-btn">Return</button>
+                        </td>
+                    </tr>
+                    <tr data-status="overdue">
+                        <td>Deep Work</td>
+                        <td>Cal Newport</td>
+                        <td data-date="2025-04-05">April 5, 2025</td>
+                        <td><span class="status-badge status-overdue">Overdue</span></td>
+                        <td class="actions-cell">
+                            <button class="table-action btn-primary renew-btn">Renew</button>
+                            <button class="table-action btn-danger return-btn">Return</button>
+                        </td>
+                    </tr>
+                    <tr data-status="available">
+                        <td>The Psychology of Money</td>
+                        <td>Morgan Housel</td>
+                        <td data-date="2025-04-20">April 20, 2025</td>
+                        <td><span class="status-badge status-available">Available</span></td>
+                        <td class="actions-cell">
+                            <button class="table-action btn-primary renew-btn">Renew</button>
+                            <button class="table-action btn-danger return-btn">Return</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Renew Confirmation Modal -->
+    <div class="modal" id="renewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Renew Book</h3>
+                <button class="close-modal" id="closeRenewModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to renew <strong id="renewBookTitle"></strong>?</p>
+                <p>The new due date will be <strong id="newDueDate"></strong>.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="table-action btn-danger" id="cancelRenewBtn">Cancel</button>
+                <button class="table-action btn-primary" id="confirmRenewBtn">Confirm Renew</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Return Confirmation Modal -->
+    <div class="modal" id="returnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Return Book</h3>
+                <button class="close-modal" id="closeReturnModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to return <strong id="returnBookTitle"></strong>?</p>
+                <div id="fineMessage" style="display: none; margin-top: 15px; padding: 10px; background-color: rgba(231, 76, 60, 0.1); border-radius: 5px;">
+                    <p><i class="fas fa-exclamation-circle"></i> This book is overdue. A fine of <strong id="fineAmount">$5.00</strong> will be applied to your account.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="table-action btn-danger" id="cancelReturnBtn">Cancel</button>
+                <button class="table-action btn-primary" id="confirmReturnBtn">Confirm Return</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const renewAllBtn = document.getElementById('renewAllBtn');
+        const returnAllBtn = document.getElementById('returnAllBtn');
+        const booksTable = document.getElementById('booksTable');
+        const renewModal = document.getElementById('renewModal');
+        const returnModal = document.getElementById('returnModal');
+        
+        // Toggle sidebar on mobile
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Dark mode toggle
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+            
+            // Save preference to localStorage
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+
+        // Search functionality
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = booksTable.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const title = row.querySelector('td').textContent.toLowerCase();
+                const author = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter by status
+        statusFilter.addEventListener('change', () => {
+            const status = statusFilter.value;
+            const rows = booksTable.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                if (status === 'all' || row.getAttribute('data-status') === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Renew All functionality
+        renewAllBtn.addEventListener('click', () => {
+            const renewableBooks = Array.from(booksTable.querySelectorAll('tbody tr'))
+                .filter(row => row.style.display !== 'none' && !row.getAttribute('data-status').includes('overdue'));
+            
+            if (renewableBooks.length === 0) {
+                alert('No renewable books found or some books are overdue and cannot be renewed.');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to renew ${renewableBooks.length} book(s)?`)) {
+                renewableBooks.forEach(row => {
+                    const title = row.querySelector('td').textContent;
+                    const dueDateCell = row.querySelector('td[data-date]');
+                    const currentDate = new Date(dueDateCell.getAttribute('data-date'));
+                    const newDate = new Date(currentDate);
+                    newDate.setDate(newDate.getDate() + 14);
+                    
+                    // Update the due date
+                    dueDateCell.setAttribute('data-date', newDate.toISOString().split('T')[0]);
+                    dueDateCell.textContent = newDate.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                    
+                    // Update status if needed
+                    if (row.getAttribute('data-status') === 'due') {
+                        row.setAttribute('data-status', 'available');
+                        row.querySelector('.status-badge').className = 'status-badge status-available';
+                        row.querySelector('.status-badge').textContent = 'Available';
+                    }
+                });
+                
+                alert(`${renewableBooks.length} book(s) renewed successfully!`);
+            }
+        });
+
+        // Return All functionality
+        returnAllBtn.addEventListener('click', () => {
+            const returnableBooks = Array.from(booksTable.querySelectorAll('tbody tr'))
+                .filter(row => row.style.display !== 'none');
+            
+            if (returnableBooks.length === 0) {
+                alert('No books to return.');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to return ${returnableBooks.length} book(s)?`)) {
+                returnableBooks.forEach(row => {
+                    // In a real app, this would make an API call to return the book
+                    row.remove();
+                });
+                
+                alert(`${returnableBooks.length} book(s) returned successfully!`);
+            }
+        });
+
+        // Book renewal functionality
+        booksTable.addEventListener('click', (e) => {
+            if (e.target.classList.contains('renew-btn')) {
+                const row = e.target.closest('tr');
+                const title = row.querySelector('td').textContent;
+                const dueDate = row.querySelector('td[data-date]').getAttribute('data-date');
+                const currentDateObj = new Date(dueDate);
+                const newDateObj = new Date(currentDateObj);
+                newDateObj.setDate(newDateObj.getDate() + 14);
+                
+                const newDateStr = newDateObj.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                document.getElementById('renewBookTitle').textContent = title;
+                document.getElementById('newDueDate').textContent = newDateStr;
+                renewModal.style.display = 'flex';
+                
+                // Store the row reference for later use
+                renewModal.dataset.rowIndex = Array.from(row.parentNode.children).indexOf(row);
+            }
+            
+            if (e.target.classList.contains('return-btn')) {
+                const row = e.target.closest('tr');
+                const title = row.querySelector('td').textContent;
+                const status = row.getAttribute('data-status');
+                
+                document.getElementById('returnBookTitle').textContent = title;
+                
+                // Show fine message if overdue
+                if (status === 'overdue') {
+                    document.getElementById('fineMessage').style.display = 'block';
+                } else {
+                    document.getElementById('fineMessage').style.display = 'none';
+                }
+                
+                returnModal.style.display = 'flex';
+                
+                // Store the row reference for later use
+                returnModal.dataset.rowIndex = Array.from(row.parentNode.children).indexOf(row);
+            }
+        });
+
+        // Modal close buttons
+        document.getElementById('closeRenewModal').addEventListener('click', () => {
+            renewModal.style.display = 'none';
+        });
+
+        document.getElementById('closeReturnModal').addEventListener('click', () => {
+            returnModal.style.display = 'none';
+        });
+
+        document.getElementById('cancelRenewBtn').addEventListener('click', () => {
+            renewModal.style.display = 'none';
+        });
+
+        document.getElementById('cancelReturnBtn').addEventListener('click', () => {
+            returnModal.style.display = 'none';
+        });
+
+        // Confirm renew
+        document.getElementById('confirmRenewBtn').addEventListener('click', () => {
+            const rowIndex = renewModal.dataset.rowIndex;
+            const row = booksTable.querySelectorAll('tbody tr')[rowIndex];
+            
+            if (row) {
+                const dueDateCell = row.querySelector('td[data-date]');
+                const currentDate = new Date(dueDateCell.getAttribute('data-date'));
+                const newDate = new Date(currentDate);
+                newDate.setDate(newDate.getDate() + 14);
+                
+                // Update the due date
+                dueDateCell.setAttribute('data-date', newDate.toISOString().split('T')[0]);
+                dueDateCell.textContent = newDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                // Update status if needed
+                if (row.getAttribute('data-status') === 'due') {
+                    row.setAttribute('data-status', 'available');
+                    row.querySelector('.status-badge').className = 'status-badge status-available';
+                    row.querySelector('.status-badge').textContent = 'Available';
+                }
+                
+                alert(`${row.querySelector('td').textContent} has been renewed. New due date is ${dueDateCell.textContent}.`);
+            }
+            
+            renewModal.style.display = 'none';
+        });
+
+        // Confirm return
+        document.getElementById('confirmReturnBtn').addEventListener('click', () => {
+            const rowIndex = returnModal.dataset.rowIndex;
+            const row = booksTable.querySelectorAll('tbody tr')[rowIndex];
+            
+            if (row) {
+                const title = row.querySelector('td').textContent;
+                const status = row.getAttribute('data-status');
+                
+                // In a real app, this would make an API call to return the book
+                row.remove();
+                
+                if (status === 'overdue') {
+                    alert(`${title} has been returned. A fine has been applied to your account.`);
+                } else {
+                    alert(`${title} has been returned. Thank you!`);
+                }
+            }
+            
+            returnModal.style.display = 'none';
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === renewModal) {
+                renewModal.style.display = 'none';
+            }
+            if (e.target === returnModal) {
+                returnModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

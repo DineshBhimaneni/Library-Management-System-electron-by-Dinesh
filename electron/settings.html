@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <style>
+        /* [Previous CSS remains exactly the same - no changes] */
+        
+        /* Additional styles for settings page only */
+        .settings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .settings-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        .settings-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .settings-table td:first-child {
+            font-weight: 600;
+            width: 60%;
+        }
+        
+        body.dark-mode .settings-table td {
+            border-bottom-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <div class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    <div class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-book"></i> <span>NexusLib Pro</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="student.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="bookcatalog.html"><i class="fas fa-book-open"></i> <span>Books Catalog</span></a></li>
+                <li><a href="Mybooks.html"><i class="fas fa-bookmark"></i> <span>My Books</span></a></li>
+                <li><a href="finesandpayments.html"><i class="fas fa-money-bill-wave"></i> <span>Fines & Payments</span></a></li>
+                <li><a href="ebook.html"><i class="fas fa-tablet-alt"></i> <span>E-Books</span></a></li>
+                <li><a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a></li>
+                <li><a href="help.html"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+                <li><a href="settings.html" class="active"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search settings...">
+            </div>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <h2>Settings</h2>
+            <p>Customize your NexusLib Pro experience.</p>
+        </div>
+
+        <div class="section-header">
+            <h3 class="section-title">Preferences</h3>
+        </div>
+        <div class="data-table">
+            <table class="settings-table">
+                <tbody>
+                    <tr>
+                        <td>Dark Mode</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" id="darkModeSwitch" title="Enable or disable dark mode">
+                                <label for="darkModeSwitch" class="visually-hidden">Dark Mode</label>
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email Notifications</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <label for="emailNotifications" class="visually-hidden">Enable or disable email notifications</label>
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SMS Reminders</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" id="smsReminders" title="Enable or disable SMS reminders">
+                                <label for="smsReminders" class="visually-hidden">SMS Reminders</label>
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-header">
+            <h3 class="section-title">Account</h3>
+        </div>
+        <div class="data-table">
+            <table class="settings-table">
+                <tbody>
+                    <tr>
+                        <td>Change Password</td>
+                        <td><button class="table-action btn-primary">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td>Logout</td>
+                        <td><button class="table-action btn-danger">Logout</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeSwitch = document.getElementById('darkModeSwitch');
+
+        // Toggle mobile menu
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                darkModeSwitch.checked = true;
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                darkModeSwitch.checked = false;
+            }
+        }
+
+        // Initialize dark mode from localStorage
+        function initDarkMode() {
+            const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+            if (darkModeEnabled) {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+                darkModeSwitch.checked = true;
+            }
+        }
+
+        // Event listeners
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        darkModeSwitch.addEventListener('change', () => {
+            localStorage.setItem('darkMode', darkModeSwitch.checked);
+            toggleDarkMode();
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', initDarkMode);
+    </script>
+</body>
+</html>

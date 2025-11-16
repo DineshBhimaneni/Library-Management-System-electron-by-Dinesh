@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - Events</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <style>
+        #calendar {
+            display: none;
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        body.dark-mode #calendar {
+            background-color: #2d2d2d;
+            color: #f0f0f0;
+        }
+        
+        .fc-event {
+            cursor: pointer;
+        }
+        
+        .fc-toolbar-title {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    <div class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-book"></i> <span>NexusLib Pro</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="student.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="bookcatalog.html"><i class="fas fa-book-open"></i> <span>Books Catalog</span></a></li>
+                <li><a href="Mybooks.html"><i class="fas fa-bookmark"></i> <span>My Books</span></a></li>
+                <li><a href="finesandpayments.html"><i class="fas fa-money-bill-wave"></i> <span>Fines & Payments</span></a></li>
+                <li><a href="ebook.html"><i class="fas fa-tablet-alt"></i> <span>E-Books</span></a></li>
+                <li><a href="events.html" class="active"><i class="fas fa-calendar-alt"></i> <span>Events</span></a></li>
+                <li><a href="help.html"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search events..." id="eventSearch">
+            </div>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <h2>Library Events</h2>
+            <p>Join us for exciting events and workshops!</p>
+            <div class="quick-actions">
+                <button class="action-btn" id="viewCalendarBtn"><i class="fas fa-calendar-plus"></i> View Calendar</button>
+            </div>
+            <div id="calendar"></div>
+        </div>
+
+        <div class="section-header">
+            <h3 class="section-title">Upcoming Events</h3>
+        </div>
+        <table class="data-table" id="eventsTable">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Author Talk: J.K. Rowling</td>
+                    <td>April 12, 2025</td>
+                    <td>5:00 PM</td>
+                    <td>Main Library Hall</td>
+                    <td><button class="table-action btn-primary">Register</button></td>
+                </tr>
+                <tr>
+                    <td>Book Club: Sci-Fi Night</td>
+                    <td>April 20, 2025</td>
+                    <td>6:30 PM</td>
+                    <td>Room 203</td>
+                    <td><button class="table-action btn-primary">Register</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    
+    <script>
+        // Initialize dark mode from localStorage
+        function initDarkMode() {
+            const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+            if (darkModeEnabled) {
+                document.body.classList.add('dark-mode');
+                const icon = document.getElementById('darkModeToggle').querySelector('i');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            const isDark = document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('darkModeToggle').querySelector('i');
+            
+            if (isDark) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+            
+            localStorage.setItem('darkMode', isDark);
+            
+            // Refresh calendar if initialized
+            if (window.calendar) {
+                window.calendar.render();
+            }
+        }
+
+        // Initialize calendar
+        function initCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            window.calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: 'Author Talk: J.K. Rowling',
+                        start: '2025-04-12T17:00:00',
+                        end: '2025-04-12T19:00:00',
+                        description: 'Main Library Hall at 5:00 PM'
+                    },
+                    {
+                        title: 'Sci-Fi Book Club',
+                        start: '2025-04-20T18:30:00',
+                        end: '2025-04-20T20:30:00',
+                        description: 'Room 203 at 6:30 PM'
+                    }
+                ],
+                eventClick: function(info) {
+                    alert(info.event.title + '\n' + info.event.extendedProps.description);
+                }
+            });
+        }
+
+        // Handle event registration
+        function handleRegistration(button) {
+            const eventName = button.closest('tr').querySelector('td').textContent;
+            alert(`You've registered for "${eventName}". See you there!`);
+            button.textContent = 'Registered';
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-success');
+            button.disabled = true;
+        }
+
+        // Search events
+        function searchEvents() {
+            const searchTerm = document.getElementById('eventSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#eventsTable tbody tr');
+            
+            rows.forEach(row => {
+                const eventName = row.querySelector('td').textContent.toLowerCase();
+                row.style.display = eventName.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+            
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+
+            // Dark mode toggle
+            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+
+            // Initialize calendar
+            initCalendar();
+
+            // Calendar toggle button
+            document.getElementById('viewCalendarBtn').addEventListener('click', () => {
+                const calendarEl = document.getElementById('calendar');
+                if (calendarEl.style.display === 'none') {
+                    window.calendar.render();
+                    calendarEl.style.display = 'block';
+                } else {
+                    calendarEl.style.display = 'none';
+                }
+            });
+
+            // Event registration buttons
+            document.querySelectorAll('.table-action').forEach(button => {
+                button.addEventListener('click', () => handleRegistration(button));
+            });
+
+            // Event search
+            document.getElementById('eventSearch').addEventListener('input', searchEvents);
+        });
+    </script>
+</body>
+</html>

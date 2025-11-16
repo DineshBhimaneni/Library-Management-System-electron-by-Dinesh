@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - Books Catalog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <script src="common.js"></script>
+</head>
+
+<body>
+    <div class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    <div class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-book"></i> <span>NexusLib Pro</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="student.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="bookcatalog.html" class="active"><i class="fas fa-book-open"></i> <span>BooksCatalog</span></a></li>
+                <li><a href="Mybooks.html"><i class="fas fa-bookmark"></i> <span>My Books</span></a></li>
+                <li><a href="finesandpayments.html"><i class="fas fa-money-bill-wave"></i> <span>Fines & Payments</span></a></li>
+                <li><a href="ebook.html"><i class="fas fa-tablet-alt"></i> <span>E-Books</span></a></li>
+                <li><a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a></li>
+                <li><a href="help.html"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search books..." id="searchInput">
+            </div>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <h2>Browse Our Catalog</h2>
+            <p>Discover thousands of books available for borrowing.</p>
+            <div class="quick-actions">
+                <button class="action-btn" id="advancedSearchBtn"><i class="fas fa-search"></i> Advanced Search</button>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h3 class="section-title">Books Catalog</h3>
+            <div class="books-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="fiction">Fiction</button>
+                <button class="filter-btn" data-filter="non-fiction">Non-Fiction</button>
+                <button class="filter-btn" data-filter="academic">Academic</button>
+            </div>
+        </div>
+        <div class="books-grid" id="booksGrid">
+            <div class="book-card" data-category="non-fiction">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/51mN3bY0JjL.SY425.jpg" alt="Atomic Habits">
+                    <div class="book-status">Available</div>
+                </div>
+                <div class="book-details">
+                    <div class="book-title">Atomic Habits</div>
+                    <div class="book-author">James Clear</div>
+                    <div class="book-meta">
+                        <span><i class="fas fa-book"></i> 320 pages</span>
+                        <span><i class="fas fa-star"></i> 4.8</span>
+                    </div>
+                    <button class="book-action">Borrow</button>
+                </div>
+            </div>
+            <div class="book-card" data-category="non-fiction">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/41ZLnc34EiL.SY425.jpg" alt="The Psychology of Money">
+                    <div class="book-status unavailable">Checked Out</div>
+                </div>
+                <div class="book-details">
+                    <div class="book-title">The Psychology of Money</div>
+                    <div class="book-author">Morgan Housel</div>
+                    <div class="book-meta">
+                        <span><i class="fas fa-book"></i> 256 pages</span>
+                        <span><i class="fas fa-star"></i> 4.7</span>
+                    </div>
+                    <button class="book-action unavailable">Reserve</button>
+                </div>
+            </div>
+            <div class="book-card" data-category="fiction">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/51xwGSNX-EL.SY425.jpg" alt="The Silent Patient">
+                    <div class="book-status">Available</div>
+                </div>
+                <div class="book-details">
+                    <div class="book-title">The Silent Patient</div>
+                    <div class="book-author">Alex Michaelides</div>
+                    <div class="book-meta">
+                        <span><i class="fas fa-book"></i> 352 pages</span>
+                        <span><i class="fas fa-star"></i> 4.5</span>
+                    </div>
+                    <button class="book-action">Borrow</button>
+                </div>
+            </div>
+            <div class="book-card" data-category="academic">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/41D3enj6JVS.SY425.jpg" alt="Computer Networking">
+                    <div class="book-status">Available</div>
+                </div>
+                <div class="book-details">
+                    <div class="book-title">Computer Networking</div>
+                    <div class="book-author">James Kurose</div>
+                    <div class="book-meta">
+                        <span><i class="fas fa-book"></i> 864 pages</span>
+                        <span><i class="fas fa-star"></i> 4.6</span>
+                    </div>
+                    <button class="book-action">Borrow</button>
+                </div>
+            </div>
+            <div class="book-card" data-category="fiction">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/51xwGSNX-EL.SY425.jpg" alt="The Silent Patient">
+                    <div class="book-status unavailable">Checked Out</div>
+                </div>
+                <div class="book-details">
+                    <div class="book-title">The Silent Patient</div>
+                    <div class="book-author">Alex Michaelides</div>
+                    <div class="book-meta">
+                        <span><i class="fas fa-book"></i> 352 pages</span>
+                        <span><i class="fas fa-star"></i> 4.5</span>
+                    </div>
+                    <button class="book-action unavailable">Reserve</button>
+                </div>
+            </div>
+            <div class="book-card" data-category="academic">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/41D3enj6JVS.SY425.jpg" alt="Computer Networking">
+                    <div class="book-status unavailable">Checked Out</div>
+                </div>
+                <div class="book-details">
+                    <div class="book-title">Computer Networking</div>
+                    <div class="book-author">James Kurose</div>
+                    <div class="book-meta">
+                        <span><i class="fas fa-book"></i> 864 pages</span>
+                        <span><i class="fas fa-star"></i> 4.6</span>
+                    </div>
+                    <button class="book-action unavailable">Reserve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const icon = darkModeToggle.querySelector('i');
+                icon.classList.toggle('fa-moon');
+                icon.classList.toggle('fa-sun');
+
+                // Save preference to localStorage
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDarkMode);
+            });
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                const icon = darkModeToggle.querySelector('i');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+
+            // Book filtering functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const booksGrid = document.getElementById('booksGrid');
+            const bookCards = document.querySelectorAll('.book-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active state
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    // Filter books
+                    const filter = button.dataset.filter;
+                    bookCards.forEach(card => {
+                        if (filter === 'all' || card.dataset.category === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Book search functionality
+            const searchInput = document.getElementById('searchInput');
+
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                bookCards.forEach(card => {
+                    const title = card.querySelector('.book-title').textContent.toLowerCase();
+                    const author = card.querySelector('.book-author').textContent.toLowerCase();
+
+                    if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // Book action buttons
+            const bookActions = document.querySelectorAll('.book-action');
+
+            bookActions.forEach(button => {
+                button.addEventListener('click', () => {
+                    const bookCard = button.closest('.book-card');
+                    const bookTitle = bookCard.querySelector('.book-title').textContent;
+                    const isAvailable = !button.classList.contains('unavailable');
+
+                    if (isAvailable) {
+                        // Borrow logic
+                        button.textContent = 'Borrowing...';
+                        setTimeout(() => {
+                            button.textContent = 'Borrowed';
+                            button.classList.add('unavailable');
+                            bookCard.querySelector('.book-status').textContent = 'Checked Out';
+                            bookCard.querySelector('.book-status').classList.add('unavailable');
+                            alert(`You've successfully borrowed "${bookTitle}". Due date is 14 days from today.`);
+                        }, 1000);
+                    } else {
+                        // Reserve logic
+                        button.textContent = 'Reserving...';
+                        setTimeout(() => {
+                            button.textContent = 'Reserved';
+                            alert(`You've reserved "${bookTitle}". Please pick it up within 3 days when available.`);
+                        }, 1000);
+                    }
+                });
+            });
+
+            // Advanced search button
+            const advancedSearchBtn = document.getElementById('advancedSearchBtn');
+
+            advancedSearchBtn.addEventListener('click', () => {
+                alert('Advanced search functionality would open a modal with more search options.');
+                // In a real implementation, this would open a modal with advanced search fields
+            });
+        });
+    </script>
+</body>
+
+</html>

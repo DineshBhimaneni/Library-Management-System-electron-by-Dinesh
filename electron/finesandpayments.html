@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusLib Pro - Fines & Payments</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS assumed from Dashboard -->
+    <style>
+        .status-paid {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    <div class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-book"></i> <span>NexusLib Pro</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="student.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="bookcatalog.html"><i class="fas fa-book-open"></i> <span>Books Catalog</span></a></li>
+                <li><a href="Mybooks.html"><i class="fas fa-bookmark"></i> <span>My Books</span></a></li>
+                <li><a href="finesandpayments.html" class="active"><i class="fas fa-money-bill-wave"></i> <span>Fines & Payments</span></a></li>
+                <li><a href="ebook.html"><i class="fas fa-tablet-alt"></i> <span>E-Books</span></a></li>
+                <li><a href="events.html"><i class="fas fa-calendar-alt"></i> <span>Events</span></a></li>
+                <li><a href="help.html"><i class="fas fa-question-circle"></i> <span>Help</span></a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search fines...">
+            </div>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <h2>Fines & Payments</h2>
+            <p>View and settle your library fines here.</p>
+            <div class="quick-actions">
+                <button class="action-btn"><i class="fas fa-credit-card"></i> Pay All</button>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h3 class="section-title">Outstanding Fines</h3>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Due Date</th>
+                    <th>Fine Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Deep Work</td>
+                    <td>April 5, 2025</td>
+                    <td>$5.00</td>
+                    <td><span class="status-badge status-overdue">Overdue</span></td>
+                    <td><button class="table-action btn-primary">Pay Now</button></td>
+                </tr>
+                <tr>
+                    <td>Atomic Habits</td>
+                    <td>April 3, 2025</td>
+                    <td>$3.00</td>
+                    <td><span class="status-badge status-overdue">Overdue</span></td>
+                    <td><button class="table-action btn-primary">Pay Now</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Initialize dark mode from localStorage
+        function initDarkMode() {
+            const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+            if (darkModeEnabled) {
+                document.body.classList.add('dark-mode');
+                const icon = document.getElementById('darkModeToggle').querySelector('i');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            const isDark = document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('darkModeToggle').querySelector('i');
+            
+            if (isDark) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+            
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Payment functions
+        function handlePayment(button) {
+            const row = button.closest('tr');
+            const bookTitle = row.querySelector('td').textContent;
+            const status = row.querySelector('.status-badge');
+
+            if (status.textContent !== "Paid") {
+                alert(`Payment for "${bookTitle}" processed successfully.`);
+                status.textContent = "Paid";
+                status.className = "status-badge status-paid";
+                button.textContent = "Paid";
+                button.classList.remove("btn-primary");
+                button.classList.add("btn-success");
+                button.disabled = true;
+            }
+        }
+
+        function handlePayAll() {
+            let unpaidFound = false;
+            const rows = document.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const status = row.querySelector('.status-badge');
+                const button = row.querySelector('.table-action');
+                const bookTitle = row.querySelector('td').textContent;
+
+                if (status.textContent !== "Paid") {
+                    unpaidFound = true;
+                    status.textContent = "Paid";
+                    status.className = "status-badge status-paid";
+                    button.textContent = "Paid";
+                    button.classList.remove("btn-primary");
+                    button.classList.add("btn-success");
+                    button.disabled = true;
+                }
+            });
+
+            if (unpaidFound) {
+                alert("All outstanding fines have been paid!");
+            } else {
+                alert("No pending payments! 💸");
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            initDarkMode();
+            
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+
+            // Dark mode toggle
+            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+
+            // Payment buttons
+            document.querySelectorAll('.table-action').forEach(button => {
+                button.addEventListener('click', () => handlePayment(button));
+            });
+
+            // Pay all button
+            document.querySelector('.action-btn').addEventListener('click', handlePayAll);
+        });
+    </script>
+</body>
+</html>
