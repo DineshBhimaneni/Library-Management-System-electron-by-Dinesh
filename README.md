@@ -80,6 +80,3 @@ License
 
 This project is licensed under the MIT License.
 
-You can just copy this content and paste it into the GitHub README.md editor.
-
-If you want, I can also make a slightly “GitHub fancy” version with badges (like Node.js version, license, issues) to make your repo look even more professional. Do you want me to do that?
